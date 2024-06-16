@@ -1,7 +1,10 @@
 import express from "express";
+import database from "./src/database/db.js";
 
 const app = express();
 const port = process.env.PORT || 3000;
+
+global.db = new database();
 
 app.use(express.json());
 
