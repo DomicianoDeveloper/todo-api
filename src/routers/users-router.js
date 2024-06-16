@@ -42,10 +42,13 @@ router.post(
 
     const { username, email, password } = matchedData(req);
 
-    const user = await UserServices.createUser(username, email, password);
+    const user = UserServices.createUser(username, email, password);
     user.save();
 
-    return res.status(201).json(user);
+    return res.status(201).json({
+      success: true,
+      message: "user created successfully",
+    });
   }
 );
 
