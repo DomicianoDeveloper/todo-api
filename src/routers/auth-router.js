@@ -20,19 +20,19 @@ passport.use(
       return done(null, false, { message: "invalid user credentials" });
     }
 
-    return done(null, user);
+    return done(null, user.id);
   })
 );
 
-passport.serializeUser((user, done) => {
-  done(null, user.id);
+passport.serializeUser((id, done) => {
+  done(null, id);
 });
 
 passport.deserializeUser((id, done) => {
   const user = db.users.find((user) => user.id === id);
 
   if (id === user.id) {
-    done(null, user);
+    done(null, user.id);
   } else {
     done(new Error("user not found"));
   }
@@ -42,7 +42,7 @@ router.post(
   "/login",
   passport.authenticate("local", {
     successRedirect: "/api/auth/status",
-    failureRedirect: "/api/auth/unauthorized",
+    failureRedirect: "/api/auth/status",
   })
 );
 
@@ -70,16 +70,16 @@ router.get("/logout", async (req, res) => {
 });
 
 router.get("/status", async (req, res) => {
+  if (!req.isAuthenticated()) {
+    return res.status(401).json({
+      success: false,
+      message: "not logged in",
+    });
+  }
+
   return res.status(202).json({
     success: true,
-    message: "successfully logged in",
-  });
-});
-
-router.get("/unauthorized", async (req, res) => {
-  return res.status(401).json({
-    success: false,
-    message: "username or password is incorrect",
+    message: "logged in",
   });
 });
 

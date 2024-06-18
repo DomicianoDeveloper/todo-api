@@ -8,9 +8,7 @@ class User {
     this.id = uuidv4();
     this.username = username;
     this.email = email;
-
-    const salt = bcrypt.genSaltSync(saltRounds);
-    this.passwordHash = bcrypt.hashSync(password, salt);
+    this.passwordHash = this.encryptPassword(password);
   }
 
   save() {
@@ -19,6 +17,22 @@ class User {
 
   async compare(password) {
     return await bcrypt.compare(password, this.passwordHash);
+  }
+
+  update(username, email, password) {
+    this.username = username || this.username;
+    this.email = email || this.email;
+    this.passwordHash = this.encryptPassword(password) || this.passwordHash;
+  }
+
+  encryptPassword(password) {
+    if (!password) {
+      return;
+    }
+
+    const salt = bcrypt.genSaltSync(saltRounds);
+    const passwordHash = bcrypt.hashSync(password, salt);
+    return passwordHash;
   }
 }
 
