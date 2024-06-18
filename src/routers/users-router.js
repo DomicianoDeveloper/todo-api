@@ -1,4 +1,4 @@
-import express, { request } from "express";
+import express from "express";
 import { validationResult, matchedData } from "express-validator";
 
 import * as schemas from "../validator/index.js";
@@ -13,8 +13,6 @@ router.post(
   async (req, res) => {
     const result = validationResult(req);
 
-    console.log(result);
-
     if (!result.isEmpty()) {
       return res.status(400).json({
         success: false,
@@ -23,8 +21,6 @@ router.post(
     }
 
     const { username, email, password } = matchedData(req);
-
-    console.log(`${username}, ${email}, ${password}`);
 
     const { user, msg } = UserServices.createUser(username, email, password);
 
@@ -38,8 +34,6 @@ router.post(
     }
 
     user.save();
-
-    console.log(db.users);
 
     return res.status(201).json({
       success: true,

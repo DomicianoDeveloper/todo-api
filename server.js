@@ -6,6 +6,8 @@ import session from "express-session";
 import database from "./src/database/db.js";
 import * as routers from "./src/routers/index.js";
 
+import Todo from "./src/models/Todo.js";
+
 const app = express();
 const port = process.env.PORT || 3000;
 global.db = new database();
@@ -31,6 +33,7 @@ app.use((req, res, next) => {
 
 app.use("/api/users", routers.users);
 app.use("/api/auth", routers.auth);
+app.use("/api/todos", routers.todos);
 
 app.all("*", async (req, res) => {
   return res.status(404).json({

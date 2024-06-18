@@ -1,4 +1,4 @@
-import { body, checkSchema } from "express-validator";
+import { checkSchema } from "express-validator";
 
 const register_user_schema = checkSchema({
   username: {
