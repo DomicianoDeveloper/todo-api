@@ -84,4 +84,29 @@ router.put(
   }
 );
 
+router.delete("/delete", authentication, (req, res) => {
+  const user_id = req.user;
+
+  req.logout((err) => {
+    if (err) {
+      return res.status(401).json({
+        success: false,
+        message: "failed to logout, user not deleted",
+      });
+    }
+    console.log(err);
+  });
+
+  UserServices.deleteUser(user_id);
+
+  return res.status(200).json({
+    success: true,
+    message: "user deleted successfully",
+  });
+});
+
+router.get("/all", (req, res) => {
+  return res.status(200).json(db.users);
+});
+
 export default router;

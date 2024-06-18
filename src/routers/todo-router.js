@@ -95,7 +95,7 @@ router.put(
   }
 );
 
-router.delete("/delete/:id", (req, res) => {
+router.delete("/delete/:id", authentication, (req, res) => {
   const { id } = req.params;
 
   if (!id) {
